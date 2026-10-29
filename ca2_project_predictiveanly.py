@@ -213,6 +213,64 @@ internet_churn = pd.crosstab(df["InternetService"],df["Churn"], normalize="index
 print(internet_churn.round(2))
 
 
+# Feature Engineering: Create Tenure Groups
+
+df["TenureGroup"] = pd.cut(
+    df["tenure"],
+    bins=[-1, 12, 24, 48, float("inf")],
+    labels=[
+        "0-12 months",
+        "13-24 months",
+        "25-48 months",
+        "49+ months"
+    ]
+)
+
+print("\nCustomer count by tenure group:")
+print(df["TenureGroup"].value_counts().sort_index())
+
+# Visualize the tenure groups
+plt.close("all")
+
+fig, ax = plt.subplots(figsize=(8, 5))
+
+sns.countplot(
+    data=df,
+    x="TenureGroup",
+    order=[
+        "0-12 months",
+        "13-24 months",
+        "25-48 months",
+        "49+ months"
+    ],
+    ax=ax
+)
+
+ax.set_title("Customer Distribution by Tenure Group")
+ax.set_xlabel("Tenure Group")
+ax.set_ylabel("Number of Customers")
+ax.tick_params(axis="x", rotation=15)
+
+fig.tight_layout()
+
+fig.savefig(
+    r"E:\ca2_predictiveanalysis\tenure_groups.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
+
+
+# Correlation Matrix
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Select numerical columns
+numeric_df = df.select_dtypes(include=["number"])
+
+
 # Correlation Matrix
 
 import matplotlib.pyplot as plt
