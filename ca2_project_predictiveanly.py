@@ -212,3 +212,36 @@ internet_churn = pd.crosstab(df["InternetService"],df["Churn"], normalize="index
 
 print(internet_churn.round(2))
 
+
+# Correlation Matrix
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Select numerical columns
+numeric_df = df.select_dtypes(include=["number"])
+
+# Calculate correlation
+correlation = numeric_df.corr()
+
+# Plot correlation matrix
+plt.close("all")
+fig, ax = plt.subplots(figsize=(10, 7))
+
+sns.heatmap(
+    correlation,
+    annot=True,
+    cmap="coolwarm",
+    fmt=".2f",
+    ax=ax
+)
+
+ax.set_title("Correlation Matrix of Numerical Features")
+plt.tight_layout()
+
+plt.savefig(
+    r"E:\ca2_predictiveanalysis\correlation_matrix.png",
+    dpi=300
+)
+
+plt.show()
