@@ -77,3 +77,19 @@ df.to_csv(r"E:\ca2_predictiveanalysis\telco_cleaned.csv",index=False)
 
 print("\nFinal cleaned dataset saved successfully!")
 
+
+import pandas as pd
+
+df = pd.read_csv(r"E:\ca2_predictiveanalysis\telco_cleaned.csv")
+
+print("Dataset shape:", df.shape)
+print("Number of rows:", df.shape[0])
+print("Number of columns:", df.shape[1])
+print("Total missing values:", df.isnull().sum().sum())
+print("Duplicate rows:", df.duplicated().sum())
+
+print("\nChurn distribution:")
+print(df["Churn"].value_counts())
+
+
+
