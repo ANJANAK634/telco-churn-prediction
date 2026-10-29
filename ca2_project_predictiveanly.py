@@ -116,3 +116,28 @@ plt.show()
 print("\nChurn percentages:")
 print((df["Churn"].value_counts(normalize=True) * 100).round(2))
 
+
+# Objective 2: Analyze Churn by Contract Type
+
+plt.close("all")
+
+fig, ax = plt.subplots(figsize=(9, 5))
+
+sns.countplot(data=df, x="Contract", hue="Churn", ax=ax)
+
+ax.set_title("Customer Churn by Contract Type")
+ax.set_xlabel("Contract Type")
+ax.set_ylabel("Number of Customers")
+ax.legend(title="Churn")
+
+fig.tight_layout()
+
+fig.savefig(r"E:\ca2_predictiveanalysis\churn_by_contract.png",dpi=300,bbox_inches="tight")
+
+plt.show()
+
+print("\nChurn percentage by contract type:")
+
+contract_churn = pd.crosstab(df["Contract"],df["Churn"],normalize="index") * 100
+
+print(contract_churn.round(2))
