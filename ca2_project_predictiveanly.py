@@ -165,3 +165,25 @@ print("\nAverage tenure by churn status:")
 print(df.groupby("Churn")["tenure"].mean().round(2))
 
 
+# Objective 4: Analyze Monthly Charges by Churn
+
+plt.close("all")
+
+fig, ax = plt.subplots(figsize=(8, 5))
+
+sns.boxplot(data=df, x="Churn", y="MonthlyCharges", ax=ax)
+
+ax.set_title("Monthly Charges by Churn Status")
+ax.set_xlabel("Customer Churn")
+ax.set_ylabel("Monthly Charges")
+
+fig.tight_layout()
+
+fig.savefig(r"E:\ca2_predictiveanalysis\monthly_charges_by_churn.png",dpi=300,bbox_inches="tight")
+
+plt.show()
+
+print("\nAverage monthly charges by churn status:")
+print(df.groupby("Churn")["MonthlyCharges"].mean().round(2))
+
+
