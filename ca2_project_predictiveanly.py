@@ -187,3 +187,28 @@ print("\nAverage monthly charges by churn status:")
 print(df.groupby("Churn")["MonthlyCharges"].mean().round(2))
 
 
+# Objective 5: Analyze Churn by Internet Service
+
+plt.close("all")
+
+fig, ax = plt.subplots(figsize=(8, 5))
+
+sns.countplot(data=df, x="InternetService",hue="Churn", ax=ax)
+
+ax.set_title("Customer Churn by Internet Service")
+ax.set_xlabel("Internet Service Type")
+ax.set_ylabel("Number of Customers")
+ax.legend(title="Churn")
+
+fig.tight_layout()
+
+fig.savefig( r"E:\ca2_predictiveanalysis\churn_by_internet_service.png",dpi=300,bbox_inches="tight")
+
+plt.show()
+
+print("\nChurn percentage by internet service:")
+
+internet_churn = pd.crosstab(df["InternetService"],df["Churn"], normalize="index") * 100
+
+print(internet_churn.round(2))
+
