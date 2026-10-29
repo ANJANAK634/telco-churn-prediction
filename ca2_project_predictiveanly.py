@@ -141,3 +141,27 @@ print("\nChurn percentage by contract type:")
 contract_churn = pd.crosstab(df["Contract"],df["Churn"],normalize="index") * 100
 
 print(contract_churn.round(2))
+
+
+# Objective 3: Analyze Tenure by Churn
+
+plt.close("all")
+
+fig, ax = plt.subplots(figsize=(8, 5))
+
+sns.boxplot(data=df, x="Churn", y="tenure", ax=ax)
+
+ax.set_title("Customer Tenure by Churn Status")
+ax.set_xlabel("Customer Churn")
+ax.set_ylabel("Tenure (Months)")
+
+fig.tight_layout()
+
+fig.savefig(r"E:\ca2_predictiveanalysis\tenure_by_churn.png",dpi=300,bbox_inches="tight")
+
+plt.show()
+
+print("\nAverage tenure by churn status:")
+print(df.groupby("Churn")["tenure"].mean().round(2))
+
+
