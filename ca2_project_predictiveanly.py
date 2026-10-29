@@ -92,4 +92,27 @@ print("\nChurn distribution:")
 print(df["Churn"].value_counts())
 
 
+#obj 1
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_theme(style="whitegrid")
+
+plt.figure(figsize=(7, 5))
+
+ax = sns.countplot(data=df, x="Churn")
+
+plt.title("Customer Churn Distribution")
+plt.xlabel("Customer Churn")
+plt.ylabel("Number of Customers")
+
+for container in ax.containers:
+    ax.bar_label(container)
+
+plt.tight_layout()
+plt.savefig(r"E:\ca2_predictiveanalysis\churn_distribution.png",dpi=300)
+plt.show()
+
+print("\nChurn percentages:")
+print((df["Churn"].value_counts(normalize=True) * 100).round(2))
 
