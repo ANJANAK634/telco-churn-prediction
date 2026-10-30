@@ -655,3 +655,82 @@ print("\nFeature importance files saved successfully:")
 print("- feature_importance.csv")
 print("- feature_importance.png")
 
+
+
+# ==========================================
+# FINAL PROJECT SUMMARY AND CONCLUSION
+# ==========================================
+
+print("\n" + "=" * 60)
+print("TELCO CUSTOMER CHURN PREDICTION")
+print("FINAL PROJECT SUMMARY")
+print("=" * 60)
+
+print("\n1. DATASET SUMMARY")
+print("Total customers analyzed:", len(df))
+print("Customers who left:", (df["Churn"] == "Yes").sum())
+print("Customers who stayed:", (df["Churn"] == "No").sum())
+
+churn_rate = (df["Churn"] == "Yes").mean() * 100
+print(f"Overall customer churn rate: {churn_rate:.2f}%")
+
+print("\n2. MACHINE LEARNING SUMMARY")
+print(results_df.round(4).to_string(index=False))
+
+print("\n3. BEST MODEL")
+print("Best model based on F1 Score:", best_model_name)
+
+best_row = results_df.iloc[0]
+
+print(f"Accuracy:  {best_row['Accuracy']:.4f}")
+print(f"Precision: {best_row['Precision']:.4f}")
+print(f"Recall:    {best_row['Recall']:.4f}")
+print(f"F1 Score:  {best_row['F1 Score']:.4f}")
+print(f"ROC-AUC:   {best_row['ROC-AUC']:.4f}")
+
+print("\n4. PROJECT CONCLUSION")
+print(
+    "This project analyzed customer churn in a telecommunications "
+    "dataset using data cleaning, exploratory data analysis, "
+    "visualization, and machine learning."
+)
+
+print(
+    "Four classification models were compared using accuracy, "
+    "precision, recall, F1 score, and ROC-AUC."
+)
+
+print(
+    "The results can help identify customers who may be at risk "
+    "of leaving and support customer retention strategies."
+)
+
+print("\n5. PROJECT COMPLETED")
+print("Check the project folder for the saved graphs and CSV files.")
+print("=" * 60)
+
+# Save final model comparison and summary
+with open(
+    r"E:\ca2_predictiveanalysis\project_summary.txt",
+    "w",
+    encoding="utf-8"
+) as file:
+
+    file.write("TELCO CUSTOMER CHURN PREDICTION\n")
+    file.write("FINAL PROJECT SUMMARY\n\n")
+
+    file.write(f"Total customers analyzed: {len(df)}\n")
+    file.write(
+        f"Customers who left: {(df['Churn'] == 'Yes').sum()}\n"
+    )
+    file.write(
+        f"Customers who stayed: {(df['Churn'] == 'No').sum()}\n"
+    )
+    file.write(f"Overall churn rate: {churn_rate:.2f}%\n\n")
+
+    file.write("MODEL COMPARISON:\n")
+    file.write(results_df.round(4).to_string(index=False))
+
+    file.write(f"\n\nBest model based on F1 Score: {best_model_name}\n")
+
+print("\nSummary saved as project_summary.txt")
