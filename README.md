@@ -206,19 +206,8 @@ The insights obtained can help telecom companies understand customer behaviour a
 - Build a web application for real-time customer churn prediction.
 - Provide personalized customer retention recommendations.
 
-## Author
-
-**[Your Name]**
-
-Data Science and Machine Learning Student
-
-Lovely Professional University (LPU)
-
 ## Acknowledgement
 
 This project was developed as part of academic learning in Data Science and Predictive Analytics. It provided practical experience in data preprocessing, exploratory data analysis, machine learning, model evaluation, and visualization.
 
----
-
-**If you find this project useful, feel free to explore the repository!**
 
