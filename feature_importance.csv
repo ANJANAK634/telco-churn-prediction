@@ -1,0 +1,16 @@
+Feature,Importance
+num__MonthlyCharges,0.14193314966697654
+num__TotalCharges,0.14179788032282703
+num__tenure,0.11720886587066259
+cat__Contract_Month-to-month,0.05509226571073935
+cat__InternetService_Fiber optic,0.03553896800759974
+cat__PaymentMethod_Electronic check,0.029391443329948544
+cat__TenureGroup_0-12 months,0.029277090574180896
+cat__Contract_Two year,0.020326536963504133
+cat__gender_Male,0.017534656982589332
+cat__PaperlessBilling_Yes,0.017043934742967806
+cat__gender_Female,0.017039563065580687
+cat__PaperlessBilling_No,0.015287751871170048
+cat__Partner_No,0.014683211870720246
+cat__Partner_Yes,0.01462526392080733
+cat__TenureGroup_49+ months,0.014223346929610255
