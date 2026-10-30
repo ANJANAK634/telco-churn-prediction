@@ -303,3 +303,149 @@ plt.savefig(
 )
 
 plt.show()
+print("\nCorrelation Matrix:")
+print(correlation.round(2))
+
+
+# ==========================================
+# MACHINE LEARNING MODEL IMPLEMENTATION
+# ==========================================
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import SimpleImputer
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    classification_report,
+    confusion_matrix
+)
+
+# Create target variable
+df["Churn_num"] = df["Churn"].map({"No": 0, "Yes": 1})
+
+# Separate features and target
+X = df.drop(columns=["Churn", "Churn_num"], errors="ignore")
+y = df["Churn_num"]
+
+# Identify numerical and categorical columns
+numeric_features = X.select_dtypes(include=["int64", "float64"]).columns
+categorical_features = X.select_dtypes(include=["object", "category"]).columns
+
+# Preprocess numerical and categorical features
+numeric_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="median")),
+    ("scaler", StandardScaler())
+])
+
+categorical_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("encoder", OneHotEncoder(handle_unknown="ignore"))
+])
+
+preprocessor = ColumnTransformer(transformers=[
+    ("num", numeric_transformer, numeric_features),
+    ("cat", categorical_transformer, categorical_features)
+])
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y
+)
+
+# Define four models
+models = {
+    "Logistic Regression": LogisticRegression(max_iter=2000),
+    "KNN": KNeighborsClassifier(n_neighbors=7),
+    "Decision Tree": DecisionTreeClassifier(
+        max_depth=8, random_state=42
+    ),
+    "Random Forest": RandomForestClassifier(
+        n_estimators=200, random_state=42, n_jobs=-1
+    )
+}
+
+results = []
+trained_models = {}
+
+
+# Train and evaluate each model
+for name, model in models.items():
+
+    pipeline = Pipeline(steps=[
+        ("preprocessor", preprocessor),
+        ("classifier", model)
+    ])
+
+    pipeline.fit(X_train, y_train)
+
+    y_pred = pipeline.predict(X_test)
+    y_prob = pipeline.predict_proba(X_test)[:, 1]
+
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, zero_division=0)
+    recall = recall_score(y_test, y_pred, zero_division=0)
+    f1 = f1_score(y_test, y_pred, zero_division=0)
+    auc = roc_auc_score(y_test, y_prob)
+
+    results.append({
+        "Model": name,
+        "Accuracy": accuracy,
+        "Precision": precision,
+        "Recall": recall,
+        "F1 Score": f1,
+        "ROC-AUC": auc
+    })
+
+    trained_models[name] = pipeline
+
+    print("\n" + "=" * 50)
+    print(name)
+    print("=" * 50)
+    print(classification_report(
+        y_test, y_pred,
+        target_names=["No Churn", "Churn"],
+        zero_division=0
+    ))
+
+    # Confusion matrix for each model
+    cm = confusion_matrix(y_test, y_pred)
+
+    plt.figure(figsize=(5, 4))
+    sns.heatmap(
+        cm, annot=True, fmt="d", cmap="Blues",
+        xticklabels=["No Churn", "Churn"],
+        yticklabels=["No Churn", "Churn"]
+    )
+    plt.title(f"Confusion Matrix - {name}")
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.tight_layout()
+
+    filename = name.lower().replace(" ", "_")
+    plt.savefig(
+        rf"E:\ca2_predictiveanalysis\confusion_matrix_{filename}.png",
+        dpi=300,
+        bbox_inches="tight"
+    )
+    plt.show()
+
+
