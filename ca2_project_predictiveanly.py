@@ -449,3 +449,124 @@ for name, model in models.items():
     plt.show()
 
 
+# ==========================================
+# MODEL COMPARISON
+# ==========================================
+
+results_df = pd.DataFrame(results)
+
+# Sort models by F1 Score
+results_df = results_df.sort_values(
+    by="F1 Score",
+    ascending=False
+).reset_index(drop=True)
+
+# Display results
+print("\n" + "=" * 60)
+print("MACHINE LEARNING MODEL COMPARISON")
+print("=" * 60)
+
+print(results_df.round(4).to_string(index=False))
+
+# Save comparison table
+results_df.to_csv(
+    r"E:\ca2_predictiveanalysis\model_comparison.csv",
+    index=False
+)
+
+
+# ==========================================
+# GRAPH: COMPARISON OF FIVE METRICS
+# ==========================================
+
+metrics = [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1 Score",
+    "ROC-AUC"
+]
+
+plot_df = results_df.set_index("Model")[metrics]
+
+plt.close("all")
+
+fig, ax = plt.subplots(figsize=(12, 6))
+
+plot_df.plot(
+    kind="bar",
+    ax=ax,
+    width=0.8
+)
+
+ax.set_title(
+    "Comparison of Machine Learning Models",
+    fontsize=14
+)
+ax.set_xlabel("Machine Learning Model")
+ax.set_ylabel("Score")
+ax.set_ylim(0, 1.05)
+
+ax.legend(
+    title="Evaluation Metrics",
+    loc="lower right"
+)
+
+ax.tick_params(axis="x", rotation=20)
+
+fig.tight_layout()
+
+# Save the graph
+fig.savefig(
+    r"E:\ca2_predictiveanalysis\model_comparison.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
+plt.close(fig)
+
+
+# ==========================================
+# DECISION TREE VISUALIZATION
+# ==========================================
+
+from sklearn.tree import plot_tree
+
+# Get the trained Decision Tree model
+dt_model = trained_models["Decision Tree"]
+
+# Get the preprocessed training data
+preprocessor_fitted = dt_model.named_steps["preprocessor"]
+classifier = dt_model.named_steps["classifier"]
+
+X_train_transformed = preprocessor_fitted.transform(X_train)
+feature_names = preprocessor_fitted.get_feature_names_out()
+
+# Plot the decision tree
+plt.figure(figsize=(24, 12))
+
+plot_tree(
+    classifier,
+    feature_names=feature_names,
+    class_names=["No Churn", "Churn"],
+    filled=True,
+    rounded=True,
+    fontsize=7,
+    max_depth=3
+)
+
+plt.title("Decision Tree Visualization - Customer Churn")
+plt.tight_layout()
+
+plt.savefig(
+    r"E:\ca2_predictiveanalysis\decision_tree.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
+plt.close()
+
+print("Decision Tree diagram saved successfully!")
+
