@@ -570,3 +570,88 @@ plt.close()
 
 print("Decision Tree diagram saved successfully!")
 
+
+
+# ==========================================
+# IDENTIFY THE BEST MODEL
+# ==========================================
+
+best_model_name = results_df.iloc[0]["Model"]
+
+print("\nBest model based on F1 Score:", best_model_name)
+
+print("\nFiles saved successfully:")
+print("- model_comparison.csv")
+print("- model_comparison.png")
+
+
+
+
+# ==========================================
+# FEATURE IMPORTANCE ANALYSIS
+# ==========================================
+
+# Get the trained Random Forest model
+rf_model = trained_models["Random Forest"]
+
+# Get the feature names after preprocessing
+preprocessor_fitted = rf_model.named_steps["preprocessor"]
+
+feature_names = preprocessor_fitted.get_feature_names_out()
+
+# Get feature importance values
+importance_values = (
+    rf_model.named_steps["classifier"].feature_importances_
+)
+
+# Create feature importance DataFrame
+importance_df = pd.DataFrame({
+    "Feature": feature_names,
+    "Importance": importance_values
+})
+
+# Select the top 15 important features
+importance_df = importance_df.sort_values(
+    by="Importance",
+    ascending=False
+).head(15)
+
+print("\n" + "=" * 60)
+print("TOP 15 FEATURES INFLUENCING CUSTOMER CHURN")
+print("=" * 60)
+
+print(importance_df.round(4).to_string(index=False))
+
+# Save feature importance results
+importance_df.to_csv(
+    r"E:\ca2_predictiveanalysis\feature_importance.csv",
+    index=False
+)
+
+# Plot feature importance
+plt.figure(figsize=(12, 7))
+
+sns.barplot(
+    data=importance_df,
+    x="Importance",
+    y="Feature"
+)
+
+plt.title("Top 15 Features Influencing Customer Churn")
+plt.xlabel("Feature Importance")
+plt.ylabel("Customer Features")
+plt.tight_layout()
+
+plt.savefig(
+    r"E:\ca2_predictiveanalysis\feature_importance.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
+plt.close()
+
+print("\nFeature importance files saved successfully:")
+print("- feature_importance.csv")
+print("- feature_importance.png")
+
